@@ -2,19 +2,22 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
-url = 'https://www.unique-poster.com/tableaux/styles-d-art-baroque.html'  # Baroque
-response = requests.get(url)
+paintingstyle = 1931
 
-soup = BeautifulSoup(response.text, 'html.parser')
-images = soup.find_all('picture/img')
-#print(images)
+for p in range(1, 5):
+    url = 'https://www.unique-poster.com/tableaux.html?p=' + str(p) + '&painting_style=' + str(paintingstyle) 
+    #url = 'https://www.unique-poster.com/tableaux/styles-d-art-graffiti-streetart.html'
+    response = requests.get(url)
 
-if not os.path.exists('images/Baroque'):
-    os.makedirs('images/Baroque')
+    soup = BeautifulSoup(response.text, 'html.parser')
+    images = soup.find_all('li', attrs= {'class'  :'item product product-item-masonary'})
 
-for img in images:
-    img_url = img['src']
-    img_name = img['alt']
-    img_data = requests.get(img_url).content
-    with open('images/Baroque' + img_name, 'wb') as handler:
-        handler.write(img_data)
+    for img in images:
+        img_url = img.picture.source['srcset'].replace('.webp', '.jpg')
+        img_name = img.a['title'].replace(' ', '_')
+        print(img_url)
+        if img_url.startswith("http"):
+            img_data = requests.get(img_url).content
+            with open(os.path.join('images', 'Art_Nouveau', img_name + '.jpg'), 'wb') as f:
+                f.write(img_data)
+
