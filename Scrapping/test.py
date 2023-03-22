@@ -2,11 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
-paintingstyle = 1931
+paintingstyle = 1936
 
 for p in range(1, 5):
     url = 'https://www.unique-poster.com/tableaux.html?p=' + str(p) + '&painting_style=' + str(paintingstyle) 
-    #url = 'https://www.unique-poster.com/tableaux/styles-d-art-graffiti-streetart.html'
+    #url = 'https://www.unique-poster.com/tableaux/styles-nouvelle-objectivite.html'
     response = requests.get(url)
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -18,6 +18,6 @@ for p in range(1, 5):
         print(img_url)
         if img_url.startswith("http"):
             img_data = requests.get(img_url).content
-            with open(os.path.join('images', 'Art_Nouveau', img_name + '.jpg'), 'wb') as f:
+            with open(os.path.join('images', 'Nouvelle_Objectivité', img_name + '.jpg'), 'wb') as f:
                 f.write(img_data)
 
